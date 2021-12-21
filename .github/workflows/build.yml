@@ -88,14 +88,14 @@ jobs:
         # Set the default path as the path to cache
         path: ${{env.GITHUB_WORKSPACE}}/boost/boost
         # Use the version as the key to only cache the correct version
-        key: boost-${{BOOST_VERSION}}
+        key: boost-${{env.BOOST_VERSION}}
     # Actual install step (only runs if the cache is empty)
     - name: Install boost
       if: steps.cache-boost.outputs.cache-hit != 'true'
       uses: MarkusJx/install-boost@v2.1.0
       with:
         # Set the boost version (required)
-        boost_version: ${{BOOST_VERSION}}
+        boost_version: ${{env.BOOST_VERSION}}
     - name: Download ccache
       id: ccache
       shell: cmake -P {0}
