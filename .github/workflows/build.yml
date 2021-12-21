@@ -120,8 +120,8 @@ jobs:
       shell: cmake -P {0}
       env:
         BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
-        BOOST_INCLUDEDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }/include}
-        BOOST_LIBRARYDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }/lib}
+        BOOST_INCLUDEDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }}/include
+        BOOST_LIBRARYDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }}/lib
       run: |
         set(ENV{CC} ${{ matrix.config.cc }})
         set(ENV{CXX} ${{ matrix.config.cxx }})
