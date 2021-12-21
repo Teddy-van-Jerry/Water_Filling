@@ -101,7 +101,7 @@ jobs:
       with:
         # Set the boost version (required)
         boost_version: ${{env.BOOST_VERSION}}
-        
+
     - name: Boost add path (build)
       if: steps.cache-boost.outputs.cache-hit != 'true'
       run: |
