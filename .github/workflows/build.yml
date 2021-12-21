@@ -142,7 +142,7 @@ jobs:
         restore-keys: |
           ${{ matrix.config.name }}-ccache-
     - name: Configure
-      shell: cmake -Boost_ARCHITECTURE ${{ env.RUNNER_ARCH }} -P {0}
+      shell: cmake -P {0}
       env:
         BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
         BOOST_INCLUDEDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }}
@@ -179,6 +179,7 @@ jobs:
             -D CMAKE_MAKE_PROGRAM=ninja
             -D CMAKE_C_COMPILER_LAUNCHER=ccache
             -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
+            -D BOOST_ROOT=path
           RESULT_VARIABLE result
         )
         if (NOT result EQUAL 0)
