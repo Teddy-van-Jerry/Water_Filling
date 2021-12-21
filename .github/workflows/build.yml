@@ -108,7 +108,6 @@ jobs:
       with:
         # Set the boost version (required)
         boost_version: ${{env.BOOST_VERSION}}
-
     - name: Configure
       shell: cmake -P {0}
       env:
