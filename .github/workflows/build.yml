@@ -21,6 +21,6 @@ jobs:
     - name: make
       run: make
     - name: make check
-      run: make check
+      run: make check ${{github.workspace}}
     - name: make distcheck
-      run: make distcheck
+      run: make distcheck ${{github.workspace}}
