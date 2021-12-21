@@ -11,6 +11,10 @@ namespace wf {
 
         double ITER_MAX = wf::DEFAULT_ITER_MAX;
         double PRECISION = wf::DEFAULT_PRECISION;
+
+        struct PlotParams {
+            bool ENABLE = false;
+        } PLOT;
     };
 }
 

@@ -48,3 +48,7 @@ wf::Vec wf::WaterFilling::optimize(Msgs* msgs) {
 
     return ret;
 }
+
+bool wf::WaterFilling::plot(const Vec& x, Msgs* msgs) {
+    return true;
+}

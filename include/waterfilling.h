@@ -17,7 +17,7 @@ namespace wf {
         Vec optimize(Msgs* msgs = nullptr);
 
     protected:
-        // vec optimize_(const vec& alpha, Params p = Params::defaultParams());
+        bool plot(const Vec& x, Msgs* msgs = nullptr);
 
     private:
         Vec alpha_;
@@ -29,8 +29,6 @@ namespace wf {
         double sum_;
 
     };
-
-    bool setOK(bool* ok, bool value);
 }
 
 #endif // WATERFILLLING_H
