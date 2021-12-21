@@ -20,22 +20,26 @@ jobs:
         - {
             name: "Windows Latest MSVC", artifact: "Windows-MSVC.7z",
             os: windows-latest,
+            architecture: x86_64,
             cc: "cl", cxx: "cl",
             environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
           }
         - {
             name: "Windows Latest MinGW", artifact: "Windows-MinGW.7z",
             os: windows-latest,
+            architecture: x86_64,
             cc: "gcc", cxx: "g++"
           }
         - {
             name: "Ubuntu Latest GCC", artifact: "Linux.7z",
             os: ubuntu-latest,
+            architecture: x64,
             cc: "gcc", cxx: "g++"
           }
         - {
             name: "macOS Latest Clang", artifact: "macOS.7z",
             os: macos-latest,
+            architecture: arm,
             cc: "clang", cxx: "clang++"
           }
 
