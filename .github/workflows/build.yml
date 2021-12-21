@@ -137,7 +137,7 @@ jobs:
         restore-keys: |
           ${{ matrix.config.name }}-ccache-
     - name: Configure
-      shell: cmake -P {0}
+      shell: cmake -DBOOST_ROOT=path -P {0}
       env:
         BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
         #${{ steps.install-boost.outputs.BOOST_ROOT }}-${{ steps.install-boost.outputs.BOOST_VER }}
