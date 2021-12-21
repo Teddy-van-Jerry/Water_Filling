@@ -121,26 +121,26 @@ jobs:
 #        set(ENV{BOOST_ROOT} ${{env.GITHUB_WORKSPACE}}/boost/boost/boost-${{env.BOOST_VERSION}})
 #        set(ENV{BOOST_INCLUDEDIR} ${{env.GITHUB_WORKSPACE}}/boost/boost/boost-${{env.BOOST_VERSION}}/include)
 #        set(ENV{BOOST_LIBRARYDIR} ${{env.GITHUB_WORKSPACE}}/boost/boost/boost-${{env.BOOST_VERSION}}/lib)
-    - name: Download ccache
-      id: ccache
-      shell: cmake -P {0}
-      run: |
-        set(ccache_url "https://github.com/cristianadam/ccache/releases/download/v$ENV{CCACHE_VERSION}/${{ runner.os }}.tar.xz")
-        file(DOWNLOAD "${ccache_url}" ./ccache.tar.xz SHOW_PROGRESS)
-        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ccache.tar.xz)
-    - name: Prepare ccache timestamp
-      id: ccache_cache_timestamp
-      shell: cmake -P {0}
-      run: |
-        string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
-        message("::set-output name=timestamp::${current_date}")
-    - name: ccache cache files
-      uses: actions/cache@v1.1.0
-      with:
-        path: .ccache
-        key: ${{ matrix.config.name }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
-        restore-keys: |
-          ${{ matrix.config.name }}-ccache-
+#    - name: Download ccache
+#      id: ccache
+#      shell: cmake -P {0}
+#      run: |
+#        set(ccache_url "https://github.com/cristianadam/ccache/releases/download/v$ENV{CCACHE_VERSION}/${{ runner.os }}.tar.xz")
+#        file(DOWNLOAD "${ccache_url}" ./ccache.tar.xz SHOW_PROGRESS)
+#        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ccache.tar.xz)
+#    - name: Prepare ccache timestamp
+#      id: ccache_cache_timestamp
+#      shell: cmake -P {0}
+#      run: |
+#        string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
+#        message("::set-output name=timestamp::${current_date}")
+#    - name: ccache cache files
+#      uses: actions/cache@v1.1.0
+#      with:
+#        path: .ccache
+#        key: ${{ matrix.config.name }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+#        restore-keys: |
+#          ${{ matrix.config.name }}-ccache-
     - name: Configure
       shell: cmake -P {0}
       env:
