@@ -6,7 +6,7 @@ env:
   CMAKE_VERSION: 3.21.1
   NINJA_VERSION: 1.10.2
   BUILD_TYPE: Release
-  CCACHE_VERSION: 4.4
+  #CCACHE_VERSION: 4.4
   BOOST_VERSION: 1.78.0
 
 jobs:
@@ -103,7 +103,7 @@ jobs:
 #
     # Actual install step (only runs if the cache is empty)
     - name: Install boost
-      if: steps.cache-boost.outputs.cache-hit != 'true'
+#      if: steps.cache-boost.outputs.cache-hit != 'true'
       uses: MarkusJx/install-boost@v2.1.0
       id: install-boost
       with:
@@ -177,8 +177,8 @@ jobs:
             -D CMAKE_BUILD_TYPE=$ENV{BUILD_TYPE}
             -G Ninja
             -D CMAKE_MAKE_PROGRAM=ninja
-            -D CMAKE_C_COMPILER_LAUNCHER=ccache
-            -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
+#            -D CMAKE_C_COMPILER_LAUNCHER=ccache
+#            -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
             -D BOOST_ROOT=path
             -D Boost_ARCHITECTURE=-$ENV{RUNNER_ARCH}
             -D BOOST_ROOT=$ENV{BOOST_ROOT}
