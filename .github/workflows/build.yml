@@ -140,8 +140,8 @@ jobs:
       shell: cmake -P {0}
       env:
         BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
-        BOOST_INCLUDEDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }}
-        BOOST_LIBRARYDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }}
+        #BOOST_INCLUDEDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }}
+        #BOOST_LIBRARYDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }}
         #${{ steps.install-boost.outputs.BOOST_ROOT }}-${{ steps.install-boost.outputs.BOOST_VER }}
         #BOOST_INCLUDEDIR: $ENV{BOOST_ROOT}/include
         #BOOST_LIBRARYDIR: $ENV{BOOST_ROOT}/lib
