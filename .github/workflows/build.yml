@@ -8,7 +8,6 @@ env:
   BUILD_TYPE: Release
   CCACHE_VERSION: 4.4
   BOOST_VERSION: 1.78.0
-  BOOST_ROOT: ${{env.GITHUB_WORKSPACE}}/boost/boost
 
 jobs:
   build:
@@ -96,6 +95,11 @@ jobs:
         path: ${{env.GITHUB_WORKSPACE}}/boost/boost
         # Use the version as the key to only cache the correct version
         key: boost-${{env.BOOST_VERSION}}
+        
+    - name: Set Booth path (cache)
+      if: steps.cache-boost.outputs.cache-hit == 'true'
+      run: |
+        set(ENV{BOOST_ROOT}, ${{env.GITHUB_WORKSPACE}}/boost/boost)
 
     # Actual install step (only runs if the cache is empty)
     - name: Install boost
