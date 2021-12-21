@@ -103,7 +103,6 @@ jobs:
 #
     # Actual install step (only runs if the cache is empty)
     - name: Install boost
-#      if: steps.cache-boost.outputs.cache-hit != 'true'
       uses: MarkusJx/install-boost@v2.1.0
       id: install-boost
       with:
