@@ -180,6 +180,7 @@ jobs:
             -D CMAKE_C_COMPILER_LAUNCHER=ccache
             -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
             -D BOOST_ROOT=path
+            -Boost_ARCHITECTURE $ENV{RUNNER_ARCH}
           RESULT_VARIABLE result
         )
         if (NOT result EQUAL 0)
