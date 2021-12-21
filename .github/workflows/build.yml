@@ -105,9 +105,9 @@ jobs:
     - name: Boost add path (build)
       if: steps.cache-boost.outputs.cache-hit != 'true'
       run: |
-        set(ENV{BOOST_ROOT} ${{ steps.install-boost.outputs.BOOST_ROOT }})
-        set(ENV{BOOST_INCLUDEDIR} ${{ steps.install-boost.outputs.BOOST_ROOT }}/include)
-        set(ENV{BOOST_LIBRARYDIR} ${{ steps.install-boost.outputs.BOOST_ROOT }}/lib)
+ #       set(ENV{BOOST_ROOT} ${{ steps.install-boost.outputs.BOOST_ROOT }})
+        set(ENV{BOOST_INCLUDEDIR} ${BOOST_ROOT}/include)
+        set(ENV{BOOST_LIBRARYDIR} ${BOOST_ROOT}/lib)
     - name: Boost add path (cache)
       if: steps.cache-boost.outputs.cache-hit == 'true'
       run: |
