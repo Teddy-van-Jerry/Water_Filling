@@ -1,3 +1,10 @@
+##### This Project #####
+bin/
+
+# ignore before ready
+doc/
+
+##### C++ #####
 # Prerequisites
 *.d
 
@@ -30,3 +37,7 @@
 *.exe
 *.out
 *.app
+
+##### Other ######
+# MacOS
+.DS_Store
