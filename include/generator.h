@@ -4,6 +4,7 @@
 #include "wf_global.h"
 #include <random>
 #include <cmath>
+#include <fstream>
 
 namespace wf {
     class Generator {
@@ -14,6 +15,8 @@ namespace wf {
         Vec normal(int length, double m, double s);
 
         Vec uniform(int length, double min, double max);
+
+        bool saveAs(const Str& file, const Vec& data) const;
 
     private:
 

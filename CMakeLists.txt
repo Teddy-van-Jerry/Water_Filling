@@ -5,7 +5,7 @@ PROJECT(Water_Filling VERSION 0.0.1)
 # SET(CMAKE_OSX_ARCHITECTURES arm64;x86_64)
 
 FIND_PACKAGE(Boost 1.70 REQUIRED
-             COMPONENTS iostreams)
+             COMPONENTS iostreams program_options)
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include
                     ${CMAKE_SOURCE_DIR}/gnuplot-iostream

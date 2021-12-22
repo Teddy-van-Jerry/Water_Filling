@@ -1,20 +1,23 @@
 #include "waterfilling.h"
 
-wf::Vec wf::WaterFilling::optimize(const wf::Vec& alpha, const Params& p, Msgs* msgs) {
+wf::Vec wf::WaterFilling::optimize(const wf::Vec& alpha, const Params& p, Msgs* msgs, double* water_level) {
     WaterFilling wf_task(alpha, p);
     return wf_task.optimize(msgs);
 }
 
 wf::WaterFilling::WaterFilling(const wf::Vec& alpha, const wf::Params& p) 
-    : alpha_(alpha), p_(p), size_(alpha.size()), sum_(0) {
-        for (const auto& a : alpha) sum_ += a;
+    : alpha_(alpha), p_(p), size_(alpha.size()), sum_(0), max_(0) {
+    for (const auto& a : alpha) {
+        sum_ += a;
+        if (a > max_) max_ = a;
     }
+}
 
 void wf::WaterFilling::setParams(const wf::Params& p) {
     p_ = p;
 }
 
-wf::Vec wf::WaterFilling::optimize(Msgs* msgs) {
+wf::Vec wf::WaterFilling::optimize(Msgs* msgs, double* water_level) {
     if (size_ == 0) {
         if (msgs) msgs->push_back("WARNING: Empty Input Vector.");
         return Vec();
@@ -34,7 +37,7 @@ wf::Vec wf::WaterFilling::optimize(Msgs* msgs) {
     int iter = 0;
     while (iter++ != p_.ITER_MAX) {
         double diff_ = diff(mid());
-        if (abs(diff_) < p_.PRECISION) break;
+        if (abs(diff_) < pow(10, -p_.PRECISION)) break;
         if (diff_ < 0) wl_min = mid();
         else wl_max = mid();
     }
@@ -45,10 +48,34 @@ wf::Vec wf::WaterFilling::optimize(Msgs* msgs) {
     Vec ret(size_, 0);
     for (int i = 0; i != size_; i++)
         if (alpha_[i] < wl_min) ret[i] = wl_min - alpha_[i];
-
+    water_level_ = wl_min;
+    if (water_level) *water_level = water_level_;
+    if (p_.PLOT.ENABLE) plot(msgs);
     return ret;
 }
 
-bool wf::WaterFilling::plot(const Vec& x, Msgs* msgs) {
+bool wf::WaterFilling::plot(Msgs* msgs) {
+    Gnuplot gp;
+
+    gp << "set terminal " + fileExt(p_.PLOT.FILE) + " size "
+          + std::to_string(p_.PLOT.WIDTH) + "," + std::to_string(p_.PLOT.HEIGHT) + " enhanced\n";
+    gp << "set output '" + p_.PLOT.FILE + "'\n";
+    if (!p_.PLOT.TITLE.empty()) gp << "set title " << p_.PLOT.TITLE;
+	gp << "set xtics 1\n";
+	gp << "set ytics 1E" + std::to_string((int)std::log10(max_ * 1.05) - 1) + " nomirror tc lt 1\n";
+	gp << "set xrange [0.5:" << std::to_string(size_) << ".5]\n";
+	gp << "set yrange [0:" << std::to_string(max_ * 1.05) << "]\n"; //
+	gp << "set style fill solid border -1\n";
+
+	Vec data_X {0};
+    Vec data_Alpha {0};
+    data_X.insert(data_X.begin() + 1, size_, water_level_);
+    data_Alpha.insert(data_Alpha.begin() + 1, alpha_.cbegin(), alpha_.cend());
+
+	gp << "plot '-' with boxes notitle lt rgb \"" + p_.PLOT.COLOR_LOWER + "\",";
+	gp << "'-' with boxes notitle lt rgb \"" + p_.PLOT.COLOR_UPPER + "\"\n";
+	gp.send1d(data_X);
+	gp.send1d(data_Alpha);
+
     return true;
 }
