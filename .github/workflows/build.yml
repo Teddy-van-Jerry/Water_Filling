@@ -135,7 +135,7 @@ jobs:
         string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
         message("::set-output name=timestamp::${current_date}")
     - name: ccache cache files
-      if: $${env.RUNNER_OS} == Windows
+      if: ${{env.RUNNER_OS}} != Windows
       uses: actions/cache@v1.1.0
       with:
         path: .ccache
