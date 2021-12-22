@@ -101,24 +101,24 @@ jobs:
 #      run: |
 #        set(ENV{BOOST_ROOT}, ${{env.GITHUB_WORKSPACE}}/boost/boost)
 #
+
     # Actual install step (only runs if the cache is empty)
-    - name: Install boost
+    - name: Install boost (Not Windows)
       if: ${{ env.RUNNER_OS }} != Windows
       uses: MarkusJx/install-boost@v2.1.0
       id: install-boost
       with:
         # Set the boost version (required)
         boost_version: ${{env.BOOST_VERSION}}
+
+    - name: Install boost (Windows)
+      if: ${{ env.RUNNER_OS }} == Windows
+      uses: MarkusJx/install-boost@v2.1.0
+      id: install-boost-win
+      with:
+        # Set the boost version (required)
+        boost_version: ${{env.BOOST_VERSION}}
         platform_version: 20.04
-        
-      - name: Install boost (Windows)
-        if: ${{ env.RUNNER_OS }} == Windows
-        uses: MarkusJx/install-boost@v2.1.0
-        id: install-boost-win
-        with:
-          # Set the boost version (required)
-          boost_version: ${{env.BOOST_VERSION}}
-          platform_version: 20.04
 
     - name: Boost add path (Windows)
       if: ${{ env.RUNNER_OS }} == Windows
