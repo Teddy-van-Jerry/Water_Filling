@@ -158,7 +158,7 @@ jobs:
           ${{ matrix.config.name }}-ccache-
     - name: Configure
       shell: cmake -DBOOST_ROOT=path -P {0}
-      # env:
+      env:
         BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
         #BOOST_INCLUDEDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }}
         #BOOST_LIBRARYDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }}
