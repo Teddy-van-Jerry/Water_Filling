@@ -17,19 +17,19 @@ jobs:
       fail-fast: false
       matrix:
         config:
-#        - {
-#            name: "Windows Latest MSVC", artifact: "Windows-MSVC.7z",
-#            os: windows-latest,
-#            architecture: x86_64,
-#            cc: "cl", cxx: "cl",
-#            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
-#          }
-#        - {
-#            name: "Windows Latest MinGW", artifact: "Windows-MinGW.7z",
-#            os: windows-latest,
-#            architecture: x86_64,
-#            cc: "gcc", cxx: "g++"
-#          }
+        - {
+            name: "Windows Latest MSVC", artifact: "Windows-MSVC.7z",
+            os: windows-latest,
+            architecture: x86_64,
+            cc: "cl", cxx: "cl",
+            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+          }
+        - {
+            name: "Windows Latest MinGW", artifact: "Windows-MinGW.7z",
+            os: windows-latest,
+            architecture: x86_64,
+            cc: "gcc", cxx: "g++"
+          }
         - {
             name: "Ubuntu Latest GCC", artifact: "Linux.7z",
             os: ubuntu-latest,
@@ -135,6 +135,7 @@ jobs:
         string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
         message("::set-output name=timestamp::${current_date}")
     - name: ccache cache files
+      if: $${env.RUNNER_OS} == Windows
       uses: actions/cache@v1.1.0
       with:
         path: .ccache
@@ -295,14 +296,14 @@ jobs:
       fail-fast: false
       matrix:
         config:
-#        - {
-#            name: "Windows Latest MSVC", artifact: "Windows-MSVC.7z",
-#            os: ubuntu-latest
-#          }
-#        - {
-#            name: "Windows Latest MinGW", artifact: "Windows-MinGW.7z",
-#            os: ubuntu-latest
-#          }
+        - {
+            name: "Windows Latest MSVC", artifact: "Windows-MSVC.7z",
+            os: ubuntu-latest
+          }
+        - {
+            name: "Windows Latest MinGW", artifact: "Windows-MinGW.7z",
+            os: ubuntu-latest
+          }
         - {
             name: "Ubuntu Latest GCC", artifact: "Linux.7z",
             os: ubuntu-latest
