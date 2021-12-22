@@ -118,7 +118,7 @@ jobs:
       with:
         # Set the boost version (required)
         boost_version: ${{env.BOOST_VERSION}}
-        platform_version: 20.04
+        platform_version: 2019
 
     - name: Boost add path (Windows)
       if: ${{ env.RUNNER_OS }} == Windows
