@@ -17,19 +17,19 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {
-            name: "Windows Latest MSVC", artifact: "Windows-MSVC.7z",
-            os: windows-latest,
-            architecture: x86_64,
-            cc: "cl", cxx: "cl",
-            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
-          }
-        - {
-            name: "Windows Latest MinGW", artifact: "Windows-MinGW.7z",
-            os: windows-latest,
-            architecture: x86_64,
-            cc: "gcc", cxx: "g++"
-          }
+#        - {
+#            name: "Windows Latest MSVC", artifact: "Windows-MSVC.7z",
+#            os: windows-latest,
+#            architecture: x86_64,
+#            cc: "cl", cxx: "cl",
+#            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+#          }
+#        - {
+#            name: "Windows Latest MinGW", artifact: "Windows-MinGW.7z",
+#            os: windows-latest,
+#            architecture: x86_64,
+#            cc: "gcc", cxx: "g++"
+#          }
         - {
             name: "Ubuntu Latest GCC", artifact: "Linux.7z",
             os: ubuntu-latest,
@@ -103,32 +103,32 @@ jobs:
 #
 
     # Actual install step (only runs if the cache is empty)
-    - name: Install boost (Not Windows)
-      if: ${{ env.RUNNER_OS }} != Windows
+    - name: Install boost
+      #if: ${{ env.RUNNER_OS }} != Windows
       uses: MarkusJx/install-boost@v2.1.0
       id: install-boost
       with:
         # Set the boost version (required)
         boost_version: ${{env.BOOST_VERSION}}
 
-    - name: Install boost (Windows)
-      if: ${{ env.RUNNER_OS }} == Windows
-      uses: MarkusJx/install-boost@v2.1.0
-      id: install-boost-win
-      with:
-        # Set the boost version (required)
-        boost_version: ${{env.BOOST_VERSION}}
-        platform_version: 2019
+#    - name: Install boost (Windows)
+#      if: ${{ env.RUNNER_OS }} == Windows
+#      uses: MarkusJx/install-boost@v2.1.0
+#      id: install-boost-win
+#      with:
+#        # Set the boost version (required)
+#        boost_version: ${{env.BOOST_VERSION}}
+#        platform_version: 2019
 
-    - name: Boost add path (Windows)
-      if: ${{ env.RUNNER_OS }} == Windows
-      run: |
-        set(ENV{BOOST_ROOT} ${{ steps.install-boost-win.outputs.BOOST_ROOT }})
-        
-    - name: Boost add path (Not Windows)
-      if: ${{ env.RUNNER_OS }} != Windows
-      run: |
-        set(ENV{BOOST_ROOT} ${{ steps.install-boost.outputs.BOOST_ROOT }})
+#    - name: Boost add path (Windows)
+#      if: ${{ env.RUNNER_OS }} == Windows
+#      run: |
+#        set(ENV{BOOST_ROOT} ${{ steps.install-boost-win.outputs.BOOST_ROOT }})
+#        
+#    - name: Boost add path (Not Windows)
+#      if: ${{ env.RUNNER_OS }} != Windows
+#      run: |
+#        set(ENV{BOOST_ROOT} ${{ steps.install-boost.outputs.BOOST_ROOT }})
 #    - name: Boost add path (cache)
 #      if: steps.cache-boost.outputs.cache-hit == 'true'
 #      run: |
@@ -159,7 +159,7 @@ jobs:
     - name: Configure
       shell: cmake -DBOOST_ROOT=path -P {0}
       # env:
-        # BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
+        BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
         #BOOST_INCLUDEDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }}
         #BOOST_LIBRARYDIR: ${{ steps.install-boost.outputs.BOOST_ROOT }}
         #${{ steps.install-boost.outputs.BOOST_ROOT }}-${{ steps.install-boost.outputs.BOOST_VER }}
@@ -322,14 +322,14 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {
-            name: "Windows Latest MSVC", artifact: "Windows-MSVC.7z",
-            os: ubuntu-latest
-          }
-        - {
-            name: "Windows Latest MinGW", artifact: "Windows-MinGW.7z",
-            os: ubuntu-latest
-          }
+#        - {
+#            name: "Windows Latest MSVC", artifact: "Windows-MSVC.7z",
+#            os: ubuntu-latest
+#          }
+#        - {
+#            name: "Windows Latest MinGW", artifact: "Windows-MinGW.7z",
+#            os: ubuntu-latest
+#          }
         - {
             name: "Ubuntu Latest GCC", artifact: "Linux.7z",
             os: ubuntu-latest
