@@ -50,6 +50,7 @@ wf::Vec wf::WaterFilling::optimize(Msgs* msgs, double* water_level) {
         if (alpha_[i] < wl_min) ret[i] = wl_min - alpha_[i];
     water_level_ = wl_min;
     if (water_level) *water_level = water_level_;
+    if (p_.PRINT) print(ret);
     if (p_.PLOT.ENABLE) plot(msgs);
     return ret;
 }
@@ -60,22 +61,33 @@ bool wf::WaterFilling::plot(Msgs* msgs) {
     gp << "set terminal " + fileExt(p_.PLOT.FILE) + " size "
           + std::to_string(p_.PLOT.WIDTH) + "," + std::to_string(p_.PLOT.HEIGHT) + " enhanced\n";
     gp << "set output '" + p_.PLOT.FILE + "'\n";
-    if (!p_.PLOT.TITLE.empty()) gp << "set title " << p_.PLOT.TITLE;
+    std::cout << "set terminal " + fileExt(p_.PLOT.FILE) + " size "
+          + std::to_string(p_.PLOT.WIDTH) + "," + std::to_string(p_.PLOT.HEIGHT) + " enhanced\n";
+    std::cout << "set output '" + p_.PLOT.FILE + "'\n";
+    if (!p_.PLOT.TITLE.empty()) gp << "set title " << p_.PLOT.TITLE << "\n";
 	gp << "set xtics 1\n";
 	gp << "set ytics 1E" + std::to_string((int)std::log10(max_ * 1.05) - 1) + " nomirror tc lt 1\n";
 	gp << "set xrange [0.5:" << std::to_string(size_) << ".5]\n";
 	gp << "set yrange [0:" << std::to_string(max_ * 1.05) << "]\n"; //
 	gp << "set style fill solid border -1\n";
+    std::cout << "set xtics 1\n";
+	std::cout << "set ytics 1E" + std::to_string((int)std::log10(max_ * 1.05) - 1) + " nomirror tc lt 1\n";
+	std::cout << "set xrange [0.5:" << std::to_string(size_) << ".5]\n";
+	std::cout << "set yrange [0:" << std::to_string(max_ * 1.05) << "]\n"; //
+	std::cout << "set style fill solid border -1\n";
 
 	Vec data_X {0};
     Vec data_Alpha {0};
     data_X.insert(data_X.begin() + 1, size_, water_level_);
     data_Alpha.insert(data_Alpha.begin() + 1, alpha_.cbegin(), alpha_.cend());
 
-	gp << "plot '-' with boxes notitle lt rgb \"" + p_.PLOT.COLOR_LOWER + "\",";
-	gp << "'-' with boxes notitle lt rgb \"" + p_.PLOT.COLOR_UPPER + "\"\n";
+	gp << "plot '-' with boxes notitle lt rgb '" + p_.PLOT.COLOR_LOWER + "',";
+	gp << "'-' with boxes notitle lt rgb '" + p_.PLOT.COLOR_UPPER + "'\n";
 	gp.send1d(data_X);
 	gp.send1d(data_Alpha);
 
+    std::cout << "plot '-' with boxes notitle lt rgb \"" + p_.PLOT.COLOR_LOWER + "\",";
+	std::cout << "'-' with boxes notitle lt rgb \"" + p_.PLOT.COLOR_UPPER + "\"\n";
+    
     return true;
 }

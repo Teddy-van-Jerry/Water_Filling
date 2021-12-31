@@ -29,3 +29,18 @@ wf::Vec wf::readFile(const Str& file, bool* ok) {
         return Vec();
     }
 }
+
+bool wf::saveAs(const Str& file, const Vec& data) {
+    if (file.empty()) return true;
+    std::ofstream f(file);
+    if (f.is_open()) {
+        for (const auto& v : data)
+            f << v << ' ';
+        f << std::endl;
+        f.close();
+        return true;
+    } else {
+        std::cerr << "ERROR: Cannot save file to '" + file + "'.";
+        return false;
+    }
+}

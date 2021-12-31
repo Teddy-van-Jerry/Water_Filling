@@ -21,6 +21,8 @@ namespace wf {
 
     Vec readFile(const Str& file, bool* ok = nullptr);
 
+    bool saveAs(const Str& file, const Vec& data);
+
 }
 
 #endif // WF_GLOBAL_H

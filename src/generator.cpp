@@ -17,12 +17,14 @@ wf::Vec wf::Generator::uniform(int length, double min, double max) {
 }
 
 bool wf::Generator::saveAs(const Str& file, const Vec& data) const {
+    if (file.empty()) return true;
     std::ofstream f(file);
     if (f.is_open()) {
         for (const auto& v : data)
             f << v << ' ';
         f << std::endl;
         f.close();
+        return true;
     } else {
         std::cerr << "ERROR: Cannot save file to '" + file + "'.";
         return false;

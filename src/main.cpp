@@ -1,3 +1,14 @@
+/**
+ * @file main.cpp
+ * @author Teddy van Jerry (me@teddy-van-Jerry.org)
+ * @brief Program Command Line Options
+ * @version 0.1
+ * @date 2021-12-31
+ * 
+ * @copyright Copyright (c) 2021 Teddy van Jerry
+ * 
+ */
+
 #include "waterfilling.h"
 #include "generator.h"
 #include <boost/program_options.hpp>
@@ -11,21 +22,32 @@ int main(int argc, char* argv[]) {
     namespace po = boost::program_options;
 
     Params param = Params::defaultParams();
+    Str output_name, input_name;
+    Str random_mode = "uniform";
     bool isAbs = true;
-    double norm = 0;
+    int length_v = 10;
+    double min_v = 0;
+    double max_v = 1;
+    double mean_v = 1;
+    double sigma_v = 1;
+    double norm = -1;
     double norm_dim = 2;
 
     po::options_description generic("Generic options");
     generic.add_options()
         ("version,v", "print version string")
-        ("help,h", "produce help message")    
+        ("help,h", "produce help message")
     ;
 
     po::options_description config("Configuration");
     config.add_options()
-        ("precision", po::value<double>(&param.PRECISION)->default_value(wf::DEFAULT_PRECISION),
+        ("input-data,i", po::value<wf::Str>(&input_name),
+            "input data file name")
+        ("output,o", po::value<wf::Str>(&output_name),
+            "output file name")
+        ("precision,p", po::value<double>(&param.PRECISION)->default_value(wf::DEFAULT_PRECISION),
             "optimization precision, i.e. -log10(LINEAR_PRECISION)")
-        ("iter-max", po::value<int>(&param.ITER_MAX)->default_value(wf::DEFAULT_ITER_MAX),
+        ("iter-max,k", po::value<int>(&param.ITER_MAX)->default_value(wf::DEFAULT_ITER_MAX),
             "maximum iteration times")
         ("print", po::value<bool>(&param.PRINT)->default_value(true),
             "print results on console")
@@ -33,7 +55,7 @@ int main(int argc, char* argv[]) {
             "plot results using GNU Plot")
         ("plt.title", po::value<wf::Str>(&param.PLOT.TITLE),
             "plot title")
-        ("plt.file", po::value<wf::Str>(&param.PLOT.TITLE)->default_value("output.png"),
+        ("plt.file", po::value<wf::Str>(&param.PLOT.TITLE),
             "plot file name")
         ("plt.c.low", po::value<wf::Str>(&param.PLOT.COLOR_LOWER)->default_value("lemonchiffon"),
             "plot color of the lower bar")
@@ -43,7 +65,19 @@ int main(int argc, char* argv[]) {
             "plot image width")
         ("plt.h", po::value<double>(&param.PLOT.HEIGHT),
             "plot image height")
-        ("abs", po::value<bool>(&isAbs),
+        ("mode,m", po::value<Str>(&random_mode)->default_value("uniform"),
+            "random data mode ('uniform' or 'normal')")
+        ("length,l", po::value<int>(&length_v),
+            "length of test data set")
+        ("min", po::value<double>(&min_v),
+            "min value for uniform distribution random data generation")
+        ("max", po::value<double>(&max_v),
+            "max value for uniform distribution random data generation")
+        ("mean", po::value<double>(&mean_v),
+            "mean value for normal distribution random data generation")
+        ("sigma", po::value<double>(&sigma_v),
+            "standard deviation for normal distribution random data generation")
+        ("abs", po::value<bool>(&isAbs)->default_value(true),
             "abs generated data")
         ("norm", po::value<double>(&norm),
             "normalize generated data")
@@ -139,13 +173,34 @@ int main(int argc, char* argv[]) {
     if (vm.count("command")) {
         Str cmd = vm["command"].as<Str>();
         if (cmd == "optimize") {
-
+            Msgs msgs;
+            bool ok;
+            Vec alpha = readFile(input_name, &ok);
+            Vec x = WaterFilling::optimize(alpha, param, &msgs);
+            saveAs(output_name, x);
         } else if (cmd == "generate") {
-
+            Generator generator;
+            Vec alpha;
+            if (length_v <= 0) {
+                std::cerr << "ERROR: The length of data cannot be zero." << std::endl;
+                return 3;
+            }
+            if (random_mode == "uniform") {
+                alpha = generator.uniform(length_v, min_v, max_v);
+            } else if (random_mode == "normal") {
+                alpha = generator.normal(length_v, min_v, sigma_v);
+            } else {
+                std::cerr << "ERROR: Unknown random number generation mode '" << random_mode << "'." << std::endl;
+                return 3;
+            }
+            if (isAbs) alpha = abs(alpha);
+            if (norm > 0) alpha = normalize(alpha, norm, norm_dim);
+            if (param.PRINT) print(alpha);
+            if (!generator.saveAs(output_name, alpha)) return 3;
         } else {
             std::cerr << "unrecognized command '" + cmd + "'" << std::endl;
         }
-    }    
+    }
 
     // if (vm.count("compression")) {
     //     cout << "Compression level was set to " 
