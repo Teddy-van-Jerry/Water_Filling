@@ -19,7 +19,7 @@ namespace wf {
 
     Str fileExt(const Str& s);
 
-    Vec readFile(const Str& file);
+    Vec readFile(const Str& file, bool* ok = nullptr);
 
 }
 

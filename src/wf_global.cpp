@@ -15,14 +15,17 @@ wf::Str wf::fileExt(const Str& s) {
     return s.substr(s.find_last_of('.') + 1);
 }
 
-wf::Vec wf::readFile(const Str& file) {
+wf::Vec wf::readFile(const Str& file, bool* ok) {
     std::ifstream f(file);
     if (f) {
         Vec ret;
         Str tmp;
         while (f >> tmp) ret.push_back(std::stod(tmp));
+        if (ok) *ok = true;
+        return ret;
     } else {
         std::cerr << "ERROR: Cannot read file '" + file + "'" << std::endl;
+        if (ok) *ok = false;
         return Vec();
     }
 }
