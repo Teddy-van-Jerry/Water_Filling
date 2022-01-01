@@ -3,9 +3,9 @@
  * @author Teddy van Jerry (me@teddy-van-Jerry.org)
  * @brief Program Command Line Options
  * @version 0.1
- * @date 2021-12-31
+ * @date 2022-01-01
  * 
- * @copyright Copyright (c) 2021 Teddy van Jerry
+ * @copyright Copyright (c) 2022 Teddy van Jerry
  * 
  */
 
@@ -174,8 +174,11 @@ int main(int argc, char* argv[]) {
         Str cmd = vm["command"].as<Str>();
         if (cmd == "optimize") {
             Msgs msgs;
+            bool ok;
             Vec alpha = readFile(input_name, &ok);
+            if (!ok) return 3;
             Vec x = WaterFilling::optimize(alpha, param, &msgs);
+            for (const auto& msg : msgs) std::cerr << msg << std::endl;
             if (!output_name.empty() && !saveAs(output_name, x)) return 3;
         } else if (cmd == "generate") {
             Generator generator;
@@ -206,28 +209,6 @@ int main(int argc, char* argv[]) {
             std::cout << "\nUse \"" << argv[0] << " -h\" for more information." << std::endl;
         }
     }
-
-    // if (vm.count("compression")) {
-    //     cout << "Compression level was set to " 
-    //         << vm["compression"].as<int>() << ".\n";
-    // } else {
-    //     cout << "Compression level was not set.\n";
-    // }
-
-    // Generator generator;
-    // Vec alpha = generator.uniform(20, 0, 10);
-    // alpha = normalize(alpha, 2.5, 1);
-    // print(alpha);
-    // Params params;
-    // params.PLOT.ENABLE = true;
-    // params.PLOT.FILE = "Test.pdf";
-    // params.PLOT.WIDTH = 3;
-    // params.PLOT.HEIGHT = 2;
-    // Vec x = WaterFilling::optimize(alpha, params);
-    // print(alpha);
-    // print(x);
-
-    // WaterFilling::WaterFilling();
 
     return 0;
 }

@@ -1,3 +1,6 @@
 [submodule "gnuplot-iostream"]
 	path = gnuplot-iostream
 	url = https://github.com/dstahlke/gnuplot-iostream.git
+[submodule "Water_Filling_Doc"]
+	path = Water_Filling_Doc
+	url = https://github.com/Teddy-van-Jerry/Water_Filling_Doc.git
