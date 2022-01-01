@@ -23,6 +23,8 @@ namespace wf {
 
     bool saveAs(const Str& file, const Vec& data);
 
+    Str toLower(const Str& s);
+
 }
 
 #endif // WF_GLOBAL_H

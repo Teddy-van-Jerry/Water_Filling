@@ -24,18 +24,18 @@ wf::Vec wf::WaterFilling::optimize(Msgs* msgs, double* water_level) {
     }
 
     double wl_max = (sum_ + 1) / size_; // upper limit of water level
-    double wl_min = sum_ / size_; // lower limit of water level
+    double wl_min = 1. / size_; // lower limit of water level
     
     auto mid = [&] { return (wl_max + wl_min) / 2; };
     auto waterSum = [&] (double level) {
         double s = 0;
-        for (const auto& a : alpha_) s += (a > level ? a - level : 0);
+        for (const auto& a : alpha_) s += (level > a ? level - a : 0);
         return s;
     };
     auto diff = [&] (double level) { return waterSum(level) - 1; };
 
     int iter = 0;
-    while (iter++ != p_.ITER_MAX) {
+    while (iter++ < p_.ITER_MAX) {
         double diff_ = diff(mid());
         if (abs(diff_) < pow(10, -p_.PRECISION)) break;
         if (diff_ < 0) wl_min = mid();
@@ -58,23 +58,31 @@ wf::Vec wf::WaterFilling::optimize(Msgs* msgs, double* water_level) {
 bool wf::WaterFilling::plot(Msgs* msgs) {
     Gnuplot gp;
 
-    gp << "set terminal " + fileExt(p_.PLOT.FILE) + " size "
-          + std::to_string(p_.PLOT.WIDTH) + "," + std::to_string(p_.PLOT.HEIGHT) + " enhanced\n";
+    Str ext = fileExt(p_.PLOT.FILE);
+    if (p_.PLOT.WIDTH <= 0) {
+        if (ext == "eps" || ext == "pdf") p_.PLOT.WIDTH = 5;
+        else p_.PLOT.WIDTH = 500;
+    }
+    if (p_.PLOT.HEIGHT <= 0) {
+        if (ext == "eps" || ext == "pdf") p_.PLOT.HEIGHT = 3;
+        else p_.PLOT.HEIGHT = 300;
+    }
+
+    Str terminal = toLower(ext);
+    if (terminal == "jpg") terminal = "jpeg";
+    else if (terminal == "tex") terminal = "tikz";
+    Str enhanced = " enhanced\n";
+    if (terminal == "tikz") enhanced = "\n";
+    gp << "set terminal " + terminal + " size "
+          + std::to_string(p_.PLOT.WIDTH) + "," + std::to_string(p_.PLOT.HEIGHT) + enhanced;
     gp << "set output '" + p_.PLOT.FILE + "'\n";
-    std::cout << "set terminal " + fileExt(p_.PLOT.FILE) + " size "
-          + std::to_string(p_.PLOT.WIDTH) + "," + std::to_string(p_.PLOT.HEIGHT) + " enhanced\n";
-    std::cout << "set output '" + p_.PLOT.FILE + "'\n";
-    if (!p_.PLOT.TITLE.empty()) gp << "set title " << p_.PLOT.TITLE << "\n";
+
+    if (!p_.PLOT.TITLE.empty()) gp << "set title '" << p_.PLOT.TITLE << "'\n";
 	gp << "set xtics 1\n";
 	gp << "set ytics 1E" + std::to_string((int)std::log10(max_ * 1.05) - 1) + " nomirror tc lt 1\n";
 	gp << "set xrange [0.5:" << std::to_string(size_) << ".5]\n";
-	gp << "set yrange [0:" << std::to_string(max_ * 1.05) << "]\n"; //
+	gp << "set yrange [0:" << std::to_string(max_ * 1.05) << "]\n";
 	gp << "set style fill solid border -1\n";
-    std::cout << "set xtics 1\n";
-	std::cout << "set ytics 1E" + std::to_string((int)std::log10(max_ * 1.05) - 1) + " nomirror tc lt 1\n";
-	std::cout << "set xrange [0.5:" << std::to_string(size_) << ".5]\n";
-	std::cout << "set yrange [0:" << std::to_string(max_ * 1.05) << "]\n"; //
-	std::cout << "set style fill solid border -1\n";
 
 	Vec data_X {0};
     Vec data_Alpha {0};
@@ -85,9 +93,6 @@ bool wf::WaterFilling::plot(Msgs* msgs) {
 	gp << "'-' with boxes notitle lt rgb '" + p_.PLOT.COLOR_UPPER + "'\n";
 	gp.send1d(data_X);
 	gp.send1d(data_Alpha);
-
-    std::cout << "plot '-' with boxes notitle lt rgb \"" + p_.PLOT.COLOR_LOWER + "\",";
-	std::cout << "'-' with boxes notitle lt rgb \"" + p_.PLOT.COLOR_UPPER + "\"\n";
     
     return true;
 }

@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
             "plot results using GNU Plot")
         ("plt.title", po::value<wf::Str>(&param.PLOT.TITLE),
             "plot title")
-        ("plt.file", po::value<wf::Str>(&param.PLOT.TITLE),
+        ("plt.file", po::value<wf::Str>(&param.PLOT.FILE),
             "plot file name")
         ("plt.c.low", po::value<wf::Str>(&param.PLOT.COLOR_LOWER)->default_value("lemonchiffon"),
             "plot color of the lower bar")
@@ -174,10 +174,9 @@ int main(int argc, char* argv[]) {
         Str cmd = vm["command"].as<Str>();
         if (cmd == "optimize") {
             Msgs msgs;
-            bool ok;
             Vec alpha = readFile(input_name, &ok);
             Vec x = WaterFilling::optimize(alpha, param, &msgs);
-            saveAs(output_name, x);
+            if (!output_name.empty() && !saveAs(output_name, x)) return 3;
         } else if (cmd == "generate") {
             Generator generator;
             Vec alpha;
@@ -199,6 +198,12 @@ int main(int argc, char* argv[]) {
             if (!generator.saveAs(output_name, alpha)) return 3;
         } else {
             std::cerr << "unrecognized command '" + cmd + "'" << std::endl;
+            std::cout << "\nUsage: " << argv[0] << " <command> [options]\n" << std::endl;
+            std::cout << "Commands:" << std::endl;
+            std::cout << "  optimize                         solve the optimization problem" << std::endl;
+            std::cout << "  generate                         generate random test data" << std::endl;
+            std::cout << "  (Leave empty)                    generic use\n" << std::endl;
+            std::cout << "\nUse \"" << argv[0] << " -h\" for more information." << std::endl;
         }
     }
 

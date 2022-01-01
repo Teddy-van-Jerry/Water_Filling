@@ -44,3 +44,9 @@ bool wf::saveAs(const Str& file, const Vec& data) {
         return false;
     }
 }
+
+wf::Str wf::toLower(const Str& s) {
+    wf::Str ret(s.length(), ' ');
+    for (int i = 0; i != s.length(); i++) ret[i] = tolower(s[i]);
+    return ret;
+}
