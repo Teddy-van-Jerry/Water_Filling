@@ -1,7 +1,7 @@
 /**
  * @file generator.h
  * @author Teddy van Jerry (me@teddy-van-Jerry.org)
- * @brief 
+ * @brief Random Data Generator
  * @version 0.1
  * @date 2022-01-01
  * 

@@ -1,7 +1,7 @@
 /**
  * @file params.h
  * @author Teddy van Jerry (me@teddy-van-Jerry.org)
- * @brief 
+ * @brief Parameters for Optimization
  * @version 0.1
  * @date 2022-01-01
  * 

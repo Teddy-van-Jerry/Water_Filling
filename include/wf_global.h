@@ -17,6 +17,8 @@
 #include <string>
 #include <fstream>
 
+#define __WF_VER__ "0.1"
+
 /**
  * @brief Water Filling namespace
  * 

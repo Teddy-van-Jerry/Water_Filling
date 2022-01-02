@@ -170,9 +170,14 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    if (vm.count("version")) {
+        std::cout << "waterfilling " << __WF_VER__ << std::endl;
+        return 1;
+    }
+
     if (vm.count("command")) {
         Str cmd = vm["command"].as<Str>();
-        if (cmd == "optimize") {
+        if (cmd == "optimize") { // optimize the water filling problem
             Msgs msgs;
             bool ok;
             Vec alpha = readFile(input_name, &ok);
@@ -180,7 +185,7 @@ int main(int argc, char* argv[]) {
             Vec x = WaterFilling::optimize(alpha, param, &msgs);
             for (const auto& msg : msgs) std::cerr << msg << std::endl;
             if (!output_name.empty() && !saveAs(output_name, x)) return 3;
-        } else if (cmd == "generate") {
+        } else if (cmd == "generate") { // generate random data
             Generator generator;
             Vec alpha;
             if (length_v <= 0) {
@@ -208,6 +213,15 @@ int main(int argc, char* argv[]) {
             std::cout << "  (Leave empty)                    generic use\n" << std::endl;
             std::cout << "\nUse \"" << argv[0] << " -h\" for more information." << std::endl;
         }
+    } else {
+        std::cerr << "no command name specified" << std::endl;
+        std::cout << "\nUsage: " << argv[0] << " <command> [options]\n" << std::endl;
+            std::cout << "Commands:" << std::endl;
+            std::cout << "  optimize                         solve the optimization problem" << std::endl;
+            std::cout << "  generate                         generate random test data" << std::endl;
+            std::cout << "  (Leave empty)                    generic use\n" << std::endl;
+            std::cout << "\nUse \"" << argv[0] << " -h\" for more information." << std::endl;
+        return 5;
     }
 
     return 0;

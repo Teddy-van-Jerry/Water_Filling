@@ -1,8 +1,9 @@
 ##### This Project #####
 bin/
 
-# ignore before ready
-doc/
+##### Doxygen Files #####
+doc/html
+Doc/latex
 
 ##### C++ #####
 # Prerequisites

@@ -34,12 +34,13 @@ wf::Vec wf::WaterFilling::optimize(Msgs* msgs, double* water_level) {
     };
     auto diff = [&] (double level) { return waterSum(level) - 1; };
 
+    // iteration using dichotomy
     int iter = 0;
     while (iter++ < p_.ITER_MAX) {
         double diff_ = diff(mid());
         if (abs(diff_) < pow(10, -p_.PRECISION)) break;
-        if (diff_ < 0) wl_min = mid();
-        else wl_max = mid();
+        if (diff_ < 0) wl_min = mid(); // update lower limit
+        else wl_max = mid(); // update upper limit
     }
     if (iter > p_.ITER_MAX && msgs)
         msgs->push_back("WARNING: Optimization Iteration Limit Reached. "
