@@ -15,4 +15,5 @@ Please view the repo [Teddy-van-Jerry/Water_Filling_Doc](https://github.com/Tedd
 This project uses `cmake`.
 
 ## License
+Copyright © 2022 Wuqiong Zhao (Teddy van Jerry).
 This project is licensed under the [MIT License](LICENSE).
